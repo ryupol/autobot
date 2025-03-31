@@ -274,7 +274,6 @@ if __name__ == "__main__":
         time.sleep(1)
 
     """
-    Category => Assigned: 1, Optional: 2, Investigate: 3, Event: 4
     Quest No. => IceBroom: 3
     """
     bot = Icebloom7Bot()
