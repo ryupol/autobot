@@ -1,12 +1,16 @@
 from autobot import Action
 from abc import abstractmethod
-import time
+import os, math
 
 
 class MhwBase(Action):
     def __init__(self):
         super().__init__()
-        self.loading_time = 10
+        self.loading_time = (
+            int(open("loading_time.txt").read().strip())
+            if os.path.exists("loading_time.txt")
+            else 15
+        )
         self.release_delay = 0.2
 
     def interact(self):
@@ -158,11 +162,11 @@ class Quest(MhwBase):
 
         self.move_down(self.camp_no - 1)  # Select Camp
         self.click_and_confirm()
-        self.wait(3)
+        self.wait(self.loading_time // 3)
 
-    def travel(self, offline=True):
+    def travel(self):
         self.press("space")
-        self.wait(2)
+        self.wait(self.loading_time // 4)
         if self.is_online:
             self.move_down()  # Select Depart
             self.interact()
@@ -170,42 +174,48 @@ class Quest(MhwBase):
         print("Go to do quest.")
         self.wait_for_loading()
 
-    def run(self, start_point=None):
+    def run(self, from_gather_item=False):
 
         print("Execute Quest Journey.")
-        if start_point == "gather":
+        if from_gather_item:
             self.gathering_to_quest()
         else:
             self.default_to_quest()
         self.select_quest()
-        self.travel(offline=True)
+        self.travel()
 
 
-class Icebloom7Bot(MhwBase):
-    def __init__(self, quest_no=3, camp_no=3, is_online=True):
+class IcebloomBot(MhwBase):
+    def __init__(self, camp_no, is_online=True):
+        super().__init__()
         self.release_delay = 0
 
+        self.camp_no = camp_no
+        self.is_online = is_online
         self.relocate = Relocate()
         self.gather_item = GatherItem()
-        self.quest = Quest(quest_no, camp_no, is_online)
+
+    @property
+    def quest(self):
+        return Quest(quest_no=3, camp_no=self.camp_no, is_online=self.is_online)
 
     def pickup(self):
         print("Pick up Iceblooms")
         self.press("f", hold_time=13)
         self.wait(0.7)
 
-    def zero_to_one(self):
+    def camp7_zero_to_one(self):
         print("Going to icebloom 1...")
         self.press("w", "left_shift", hold_time=0.6)
         self.press("w", "d", "left_shift", hold_time=1.5)
-        self.press("d", "left_shift", hold_time=2)
+        self.press("d", "left_shift", hold_time=2.3)
         self.wait(1.5)
         self.press("a", hold_time=1)
         self.press("a", "s", "left_shift", hold_time=8.5)
         self.press("s", hold_time=1.5)
         self.pickup()
 
-    def one_to_two(self):
+    def camp7_one_to_two(self):
         print("Going to icebloom 2...")
         self.press("a", "left_shift", hold_time=7.5)
         self.wait(0.7)
@@ -213,7 +223,7 @@ class Icebloom7Bot(MhwBase):
         self.press("s", "left_shift", hold_time=1)
         self.pickup()
 
-    def two_to_three(self):
+    def camp7_two_to_three(self):
         print("Going to icebloom 3...")
         self.press("a", hold_time=1.3)
         self.press("a", "s", "left_shift", hold_time=5.7)
@@ -222,8 +232,9 @@ class Icebloom7Bot(MhwBase):
 
     def complete_quest(self):
         print("Getting Quest Reward...")
+        self.wait(7)  # Wait fot acting
         self.wait(20)  # Wait 20 second
-        n = (self.loading_time * 2) // 0.25
+        n = math.ceil((self.loading_time * 2) // 0.25)
         for _ in range(n):  # Spam get item (x2 time of loading)
             self.press("f", hold_time=0.1)
             self.wait(0.1)
@@ -238,50 +249,28 @@ class Icebloom7Bot(MhwBase):
         self.interact()
         self.confirm()
         self.back()
-        self.wait(5)  # Wait for animation
+        self.wait(7)  # Wait for animation
         self.wait_for_loading()
 
-    def progress(self):
+    def camp7_progress(self):
         print("Let's Rock.")
-        self.zero_to_one()
-        self.one_to_two()
-        self.two_to_three()
+        self.camp7_zero_to_one()
+        self.camp7_one_to_two()
+        self.camp7_two_to_three()
         self.complete_quest()
         self.abandon_quest()  # Just in case the quest is not complete
 
-    def run_quest(self, start_point, i):
-        """Helper function to execute a quest run."""
-        print(f"round {i+1} -----------")
-        self.quest.run(start_point)
-        self.progress()
+    def run_quest(self, from_gather_item, i):
+        print(f"Round {i+1} -------------")
+        self.quest.run(from_gather_item)
+        if self.camp_no == 3:
+            self.camp7_progress()
 
-    def run(self):
-        i = 0
-        for _ in range(5):
-            # Run from starting point
-            self.run_quest(start_point="start", i=i)
-            i += 1
+    def run(self, gather_item=False):
+        for i in range(4):
+            self.run_quest(from_gather_item=False, i=i)
 
-        # Gather items and run from "gather" to quest board point
-        self.gather_item.run()
-        self.run_quest(start_point="gather", i=i)
+        if gather_item:
+            self.gather_item.run()
 
-
-# === Automation Entry Point ===
-if __name__ == "__main__":
-    for i in reversed(range(3)):
-        print(f"Starting automation in {i + 1} seconds...")
-        time.sleep(1)
-
-    """
-    Quest No. => IceBroom: 3
-    """
-    bot = Icebloom7Bot()
-    for i in range(1):  # 1 Big Round => 1000 Seconds or around 17 minutes.
-        print(f"Big Round {i+1} =============")
-
-        ## เลือกคำสั่ง
-        # bot.run_quest(start_point="default")  # ฟาร์มเควสอย่างเดียว
-        # bot.run()  # ฟาร์มเควส 5 รอบ + Refillปุ๋ยและเก็บเกี่ยว + วิ่งไปฟาร์มเควสอีกรอบ รวม 6 รอบ
-
-        bot.run()
+        self.run_quest(from_gather_item=gather_item, i=5)
