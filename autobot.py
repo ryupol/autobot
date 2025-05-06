@@ -63,6 +63,21 @@ def ReleaseKey(hexKeyCode):
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
+def MoveMouse(x, y):
+    extra = ctypes.c_ulong(0)
+    ii_ = Input_I()
+    ii_.mi = MouseInput(
+        dx=x,
+        dy=y,
+        mouseData=0,
+        dwFlags=0x0001,  # MOUSEEVENTF_MOVE
+        time=0,
+        dwExtraInfo=ctypes.pointer(extra),
+    )
+    command = Input(ctypes.c_ulong(0), ii_)
+    SendInput(1, ctypes.pointer(command), ctypes.sizeof(command))
+
+
 def wait(second):
     return time.sleep(second)
 
@@ -203,3 +218,6 @@ class Action:
                 ReleaseKey(key_code)
 
             wait(self.release_delay)
+
+    def move_mouse(self, dx, dy):
+        MoveMouse(dx, dy)

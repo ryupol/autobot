@@ -1,6 +1,7 @@
 from autobot import Action
 from abc import abstractmethod
 import os, math
+import time
 
 
 class MhwBase(Action):
@@ -272,5 +273,40 @@ class IcebloomBot(MhwBase):
 
         if gather_item:
             self.gather_item.run()
-
         self.run_quest(from_gather_item=gather_item, i=5)
+
+class Tailraider(MhwBase):
+    def __init__(self):
+        self.release_delay = 0.1
+
+    def run(self):
+        self.press("e")
+        self.wait(2)
+        for _ in range(18):
+            self.press("f")
+
+        self.wait(2.3)
+
+
+# === Automation Entry Point ===
+if __name__ == "__main__":
+    for i in reversed(range(3)):
+        print(f"Starting automation in {i + 1} seconds...")
+        time.sleep(1)
+
+    """
+    Quest No. => IceBroom: 3
+    """
+    # bot = Icebloom7Bot()
+    # for i in range(1):  # 1 Big Round => 1000 Seconds or around 17 minutes.
+    #     print(f"Big Round {i+1} =============")
+
+    #     ## เลือกคำสั่ง
+    #     # bot.run_quest(start_point="default")  # ฟาร์มเควสอย่างเดียว
+    #     # bot.run()  # ฟาร์มเควส 5 รอบ + Refillปุ๋ยและเก็บเกี่ยว + วิ่งไปฟาร์มเควสอีกรอบ รวม 6 รอบ
+
+    #     bot.run()
+
+    bot = Tailraider()
+    for _ in range(40):
+        bot.run()
