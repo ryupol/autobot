@@ -87,7 +87,7 @@ python -m gamebots.games.cookie_run 4
 ### เพิ่ม Strategy ใหม่ (เช่น 5, 6)
 
 1. สร้างคลาสใหม่ใน `strategies.py` สืบทอดจาก `FarmCoinBase`
-   (หรือ `PatternFarmCoin`) แล้ว implement method `run()`
+   (หรือ `PatternFarmCoin`) แล้ว implement เมท็อด `run()`
 2. export คลาสใน `__init__.py`
 3. เพิ่มลง dict `STRATEGIES` ใน `__main__.py`:
 
