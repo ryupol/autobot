@@ -204,8 +204,11 @@ class Action:
     def wait(second):
         return time.sleep(second)
 
-    def press(self, *keys, loops=1, hold_time=0.3):
+    def press(self, *keys, loops=1, hold_time=0.3, release_delay=None):
         hex_key_codes = [self.__KEY_MAPPING[key] for key in keys]
+
+        if release_delay is None:
+            release_delay = self.release_delay
 
         for _ in range(loops):
             for key_code in hex_key_codes:
@@ -217,7 +220,7 @@ class Action:
             for key_code in hex_key_codes:
                 ReleaseKey(key_code)
 
-            wait(self.release_delay)
+            wait(release_delay)
 
     def move_mouse(self, dx, dy):
         MoveMouse(dx, dy)
