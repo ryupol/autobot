@@ -1,4 +1,4 @@
-"""Cookie Run gameplay strategy variants."""
+"""Cookie Run Classic gameplay strategy variants."""
 
 import random
 import time
