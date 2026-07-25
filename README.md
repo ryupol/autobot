@@ -1,0 +1,217 @@
+# Gamebots
+
+[ภาษาไทย](#ภาษาไทย) | [English](#english)
+
+## ภาษาไทย
+
+Gamebots คือชุดสคริปต์กดคีย์บอร์ดอัตโนมัติตามเวลาสำหรับ:
+
+- Monster Hunter: World
+- Clair Obscur: Expedition 33
+- Cookie Run Classic
+
+โค้ดรับอินพุตของ Windows ที่ใช้ร่วมกันอยู่ใน `gamebots/core/`
+ส่วน component, strategy และ runner ของแต่ละเกมอยู่ใน `gamebots/games/`
+
+สคริปต์ส่งคีย์บอร์ดตรงไปยังหน้าต่างที่กำลัง active โดยไม่ตรวจจับภาพหน้าจอ
+ดังนั้นตำแหน่งเริ่มต้น ปุ่มควบคุม และเวลาโหลดต้องตรงกับที่สคริปต์คาดไว้
+
+### ความต้องการของระบบ
+
+- Windows 10 หรือ 11
+- Python 3.10 ขึ้นไป
+- เกมตั้งค่าปุ่มตามที่สคริปต์คาดไว้
+- PowerShell หรือ Command Prompt
+
+ไม่ต้องติดตั้ง Python package เพิ่ม
+
+### การติดตั้ง
+
+1. ติดตั้ง Python จาก <https://www.python.org/downloads/>
+2. ระหว่างติดตั้ง เลือก **Add Python to PATH**
+3. ดาวน์โหลดหรือ clone repository นี้
+4. เปิด PowerShell ในโฟลเดอร์โปรเจกต์
+5. ตรวจสอบ Python:
+
+```powershell
+python --version
+```
+
+ถ้าไม่มีคำสั่ง `python` ให้ใช้ Python Launcher:
+
+```powershell
+py --version
+```
+
+### การรัน
+
+เตรียมเกมตาม README ของเกมนั้น แล้วรันคำสั่ง:
+
+| เกม/โหมด | คำสั่ง | วิธีใช้ |
+|---|---|---|
+| MHW ฟาร์ม Icebloom | `python -m gamebots.games.monster_hunter_world icebloom` | [README MHW](gamebots/games/monster_hunter_world/README.md#ภาษาไทย) |
+| MHW Tailraider | `python -m gamebots.games.monster_hunter_world tailraider` | [README MHW](gamebots/games/monster_hunter_world/README.md#ภาษาไทย) |
+| Expedition 33 ฟาร์ม EXP | `python -m gamebots.games.expedition_33` | [README Expedition 33](gamebots/games/expedition_33/README.md#ภาษาไทย) |
+| Cookie Run Classic แบบ 1 | `python -m gamebots.games.cookie_run 1` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+| Cookie Run Classic แบบ 2 | `python -m gamebots.games.cookie_run 2` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+| Cookie Run Classic แบบ 3 | `python -m gamebots.games.cookie_run 3` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+| Cookie Run Classic แบบ 4 | `python -m gamebots.games.cookie_run 4` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+| Cookie Run Classic สุ่มแบบ 1–3 | `python -m gamebots.games.cookie_run mixed` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+
+เปลี่ยน `python` เป็น `py` ได้เมื่อจำเป็น:
+
+```powershell
+py -m gamebots.games.monster_hunter_world icebloom
+```
+
+แต่ละ launcher นับถอยหลัง 3 วินาทีสำหรับสลับกลับไปหน้าเกม
+หยุดสคริปต์ได้ด้วย `Ctrl+C` ใน terminal
+
+`-m` ย่อมาจาก module ให้ Python หา package ตาม import path แล้วรันไฟล์
+`__main__.py` ของ package นั้น ตัวอย่าง:
+
+```powershell
+python -m gamebots.games.cookie_run 2
+```
+
+คำสั่งนี้รัน `gamebots/games/cookie_run/__main__.py` และส่ง `2`
+เข้าไปเป็น strategy
+
+### โครงสร้างโปรเจกต์
+
+```text
+gamebots/
+├── core/
+│   ├── action.py
+│   └── windows_input.py
+└── games/
+    ├── cookie_run/
+    ├── expedition_33/
+    └── monster_hunter_world/
+```
+
+แต่ละเกมมี `__main__.py` เป็น command-line entry point และมี logic อยู่ใน
+package ของเกมนั้น ไม่มี compatibility launcher เก่าที่ root แล้ว
+
+### การทดสอบ
+
+Test ใช้ input ปลอมและจะไม่กดปุ่มจริง:
+
+```powershell
+python -m unittest discover -v
+```
+
+### ข้อควรระวัง
+
+ควรเฝ้าดูอย่างน้อยหนึ่งรอบเต็มก่อนปล่อยให้ทำงานเอง เวลาอาจคลาดเคลื่อนเมื่อเกม
+กระตุก โหลดช้า หน้าต่างเกมไม่ได้ active หรือปุ่มควบคุมไม่ตรง
+ตรวจสอบกฎและเงื่อนไขของแต่ละเกมก่อนใช้ระบบอัตโนมัติ
+
+
+---
+
+## English
+
+Gamebots is a collection of timed keyboard automation scripts for:
+
+- Monster Hunter: World;
+- Clair Obscur: Expedition 33;
+- Cookie Run Classic.
+
+Shared Windows input code lives in `gamebots/core/`. Each game has isolated
+components, strategies, and runners under `gamebots/games/`.
+
+These scripts send keyboard input directly to the focused window. They do not
+use screen recognition, so correct starting position, key bindings, and loading
+times matter.
+
+## Requirements
+
+- Windows 10 or 11;
+- Python 3.10 or newer;
+- game using expected keyboard bindings;
+- terminal such as PowerShell or Command Prompt.
+
+No third-party Python packages are required.
+
+## Install
+
+1. Install Python from <https://www.python.org/downloads/>.
+2. During installation, enable **Add Python to PATH**.
+3. Download or clone this repository.
+4. Open PowerShell in project folder.
+5. Check Python:
+
+```powershell
+python --version
+```
+
+If `python` is unavailable, use Windows launcher:
+
+```powershell
+py --version
+```
+
+## Run
+
+Prepare game using its game-specific README, then launch matching script:
+
+| Game/mode | Command | Instructions |
+|---|---|---|
+| MHW Icebloom | `python -m gamebots.games.monster_hunter_world icebloom` | [MHW README](gamebots/games/monster_hunter_world/README.md) |
+| MHW Tailraider | `python -m gamebots.games.monster_hunter_world tailraider` | [MHW README](gamebots/games/monster_hunter_world/README.md) |
+| Expedition 33 EXP farm | `python -m gamebots.games.expedition_33` | [Expedition 33 README](gamebots/games/expedition_33/README.md) |
+| Cookie Run Classic strategy 1 | `python -m gamebots.games.cookie_run 1` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+| Cookie Run Classic strategy 2 | `python -m gamebots.games.cookie_run 2` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+| Cookie Run Classic strategy 3 | `python -m gamebots.games.cookie_run 3` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+| Cookie Run Classic strategy 4 | `python -m gamebots.games.cookie_run 4` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+| Cookie Run Classic mixed 1–3 | `python -m gamebots.games.cookie_run mixed` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+
+Replace `python` with `py` when needed:
+
+```powershell
+py -m gamebots.games.monster_hunter_world icebloom
+```
+
+Each launcher gives 3 seconds to focus game window. Stop automation from
+terminal with `Ctrl+C`.
+
+`-m` means module. Python resolves the package through its import path, then
+runs that package’s `__main__.py`. For example:
+
+```powershell
+python -m gamebots.games.cookie_run 2
+```
+
+This runs `gamebots/games/cookie_run/__main__.py` and passes `2` as the
+strategy.
+
+## Project structure
+
+```text
+gamebots/
+├── core/
+│   ├── action.py
+│   └── windows_input.py
+└── games/
+    ├── cookie_run/
+    ├── expedition_33/
+    └── monster_hunter_world/
+```
+
+Each game contains a `__main__.py` command-line entry point and keeps its
+behavior inside its package. Old root compatibility launchers are removed.
+
+## Tests
+
+Tests use fake input and do not press real keys:
+
+```powershell
+python -m unittest discover -v
+```
+
+## Important
+
+Watch first complete loop before leaving automation unattended. Timing can drift
+when game lags, loading takes longer, window focus changes, or key bindings
+differ. Check each game’s rules and terms before using automation.

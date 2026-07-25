@@ -1,0 +1,228 @@
+# Cookie Run Classic
+
+[ภาษาไทย](#ภาษาไทย) | [English](#english)
+
+## ภาษาไทย
+
+สคริปต์ Cookie Run Classic ช่วยเล่นด่าน เก็บรางวัล และเริ่มรอบใหม่อัตโนมัติ
+ต้องเริ่มจากหน้า Home ของ Episode ใดก็ได้
+
+ปุ่มที่สคริปต์คาดไว้:
+
+- `D`: เลือกเมนู เริ่มเกม หรือสไลด์
+- `A` หรือ `Space`: กระโดด
+- ปุ่มตัวเลข: ซื้อไอเทมและรับรางวัล
+- `Esc`, `O` และ `Q`: จบรอบและออกจากหน้าปัจจุบัน
+
+### ก่อนเริ่ม
+
+1. เปิด Episode ใดก็ได้
+2. อยู่ที่หน้า Home ของ Episode
+3. ตรวจสอบว่าตั้งค่าปุ่มตรงกับสคริปต์
+4. เปิด terminal ที่ root ของโปรเจกต์
+5. รัน strategy ที่ต้องการ
+6. ระหว่างนับถอยหลัง 3 วินาที ให้สลับกลับไปหน้าเกม
+
+Strategy มาตรฐานจะเข้าหน้าเตรียมเกม เลือก Double Coin เริ่มวิ่ง เล่นด่าน
+เก็บรางวัล และเริ่มรอบใหม่อัตโนมัติ ค่าเริ่มต้นรัน 100 รอบ
+และมีพักเป็นครั้งคราว
+
+เปลี่ยนจำนวนรอบได้ด้วย `--rounds`:
+
+```powershell
+python -m gamebots.games.cookie_run 2 --rounds 10
+```
+
+### Strategy 1 — กระโดดสองชั้นอัตโนมัติ
+
+```powershell
+python -m gamebots.games.cookie_run 1
+```
+
+วนรอบอัตโนมัติ ใช้รูปแบบเน้นกระโดดสองชั้น และสุ่มเวลาด้วย Gaussian timing
+
+### Strategy 2 — กระโดดสองชั้นอัตโนมัติ
+
+```powershell
+python -m gamebots.games.cookie_run 2
+```
+
+วนรอบอัตโนมัติ เน้นกระโดดสองชั้น และมีการกระโดดครั้งเดียว สไลด์
+หรือแก้จังหวะเป็นครั้งคราว
+
+### Strategy 3 — กระโดดครั้งเดียวอัตโนมัติ
+
+```powershell
+python -m gamebots.games.cookie_run 3
+```
+
+วนรอบอัตโนมัติ เน้นกระโดดครั้งเดียว และรอช่วงสั้นก่อนเริ่มกดปุ่มระหว่างวิ่ง
+
+### สุ่ม Strategy 1–3
+
+```powershell
+python -m gamebots.games.cookie_run mixed
+```
+
+สุ่มใช้ Strategy 1, 2 หรือ 3 ใหม่ในแต่ละรอบ
+
+### Strategy 4 — โหมด external hotkey
+
+```powershell
+python -m gamebots.games.cookie_run 4
+```
+
+โหมดทดลอง หลังเตรียมเกมจะกด `Right Alt` ร่วมกับปุ่มสุ่ม `0`, `-` หรือ `=`
+แล้วรอจนจบรอบ ใช้เฉพาะเมื่อตั้งค่า emulator หรือ external hotkey
+สำหรับปุ่มเหล่านี้แล้ว
+
+### แก้ปัญหา
+
+- เริ่มจากเมนูผิด: กลับหน้า Home ของ Episode แล้วเริ่ม script ใหม่
+- เลือกไอเทมไม่ถูก: ตรวจสอบปุ่มตัวเลขและ focus ของเกม
+- จังหวะกระโดดไม่ตรง: ลอง Strategy อื่นหรือปรับเวลาในโค้ด
+- Emulator หยุดผิดจังหวะ: ตรวจสอบปุ่ม `Esc`, `O` และ `Q`
+- หยุดสคริปต์: กลับไป terminal แล้วกด `Ctrl+C`
+
+### เพิ่ม Strategy ใหม่ (เช่น 5, 6)
+
+1. สร้างคลาสใหม่ใน `strategies.py` สืบทอดจาก `FarmCoinBase`
+   (หรือ `PatternFarmCoin`) แล้ว implement เมท็อด `run()`
+2. export คลาสใน `__init__.py`
+3. เพิ่มลง dict `STRATEGIES` ใน `__main__.py`:
+
+   ```python
+   STRATEGIES = {
+       "1": FarmCoin1,
+       # ...
+       "5": FarmCoin5,   # เพิ่มบรรทัดนี้
+   }
+   ```
+
+   เท่านี้ก็รันด้วย `python -m gamebots.games.cookie_run 5` ได้
+
+**เพิ่มลงโหมด `mixed`:** แก้ค่า default `farm_classes` ใน `run_mixed`
+ที่ `runner.py`:
+
+```python
+def run_mixed(rounds=100, farm_classes=(FarmCoin1, FarmCoin2, FarmCoin3)):
+```
+
+เพิ่มคลาสที่ต้องการลงใน tuple เช่น `(FarmCoin1, FarmCoin2, FarmCoin3, FarmCoin5)`
+Strategy ที่อยู่ใน `STRATEGIES` แต่ไม่อยู่ใน tuple นี้ จะรันได้เฉพาะแบบระบุตรง ๆ
+เท่านั้น (ไม่ถูกสุ่มใน `mixed`) — เช่นเดียวกับ `FarmCoin4` ตอนนี้
+
+
+---
+
+## English
+
+Cookie Run Classic scripts automate episode runs, reward collection, and repeated
+rounds. Start from home page of any episode.
+
+Scripts expect configured keyboard controls:
+
+- `D`: navigate/start/slide;
+- `A` or `Space`: jump;
+- number keys: item and reward menus;
+- `Esc`, `O`, and `Q`: end and exit flow.
+
+## Before starting
+
+1. Open any episode.
+2. Stay on episode home page.
+3. Confirm expected keyboard bindings.
+4. Open terminal in project root.
+5. Run selected strategy.
+6. Switch focus to game during 3-second countdown.
+
+Each standard strategy automatically opens preparation, selects Double Coin,
+starts run, plays, collects rewards, and loops. Default runner performs 100
+rounds with occasional breaks.
+
+Change round count with `--rounds`:
+
+```powershell
+python -m gamebots.games.cookie_run 2 --rounds 10
+```
+
+## Strategy 1 — automatic double jump
+
+```powershell
+python -m gamebots.games.cookie_run 1
+```
+
+Uses automatic loop with double-jump-oriented sequence and Gaussian timing.
+
+## Strategy 2 — automatic double jump
+
+```powershell
+python -m gamebots.games.cookie_run 2
+```
+
+Uses automatic loop with double jump as primary pattern plus occasional single
+jump, slide, and recovery patterns.
+
+## Strategy 3 — automatic single jump
+
+```powershell
+python -m gamebots.games.cookie_run 3
+```
+
+Uses automatic loop with single jump as primary pattern. Adds initial wait
+before gameplay actions.
+
+## Mixed strategies 1–3
+
+```powershell
+python -m gamebots.games.cookie_run mixed
+```
+
+Randomly selects strategy 1, 2, or 3 for each round.
+
+## Strategy 4 — external hotkey mode
+
+```powershell
+python -m gamebots.games.cookie_run 4
+```
+
+Experimental mode. After preparation, presses `Right Alt` with random
+`0`, `-`, or `=` key, then waits for run duration. Use only when emulator or
+external hotkeys are configured for this behavior.
+
+## Troubleshooting
+
+- Script starts from wrong menu: return to episode home page and restart.
+- Item selection fails: verify number-key mappings and game focus.
+- Jump timing fails: choose another strategy or adjust timing code.
+- Emulator pauses unexpectedly: confirm `Esc`, `O`, and `Q` mappings.
+- Stop automation: focus terminal and press `Ctrl+C`.
+
+## Adding a new strategy (e.g. 5, 6)
+
+1. Create a new class in `strategies.py` subclassing `FarmCoinBase`
+   (or `PatternFarmCoin`) and implement `run()`.
+2. Export the class in `__init__.py`.
+3. Register it in the `STRATEGIES` dict in `__main__.py`:
+
+   ```python
+   STRATEGIES = {
+       "1": FarmCoin1,
+       # ...
+       "5": FarmCoin5,   # add this line
+   }
+   ```
+
+   It is now runnable with `python -m gamebots.games.cookie_run 5`.
+
+**Include it in `mixed`:** edit the default `farm_classes` in `run_mixed`
+in `runner.py`:
+
+```python
+def run_mixed(rounds=100, farm_classes=(FarmCoin1, FarmCoin2, FarmCoin3)):
+```
+
+Add the class to the tuple, e.g. `(FarmCoin1, FarmCoin2, FarmCoin3, FarmCoin5)`.
+A strategy registered in `STRATEGIES` but left out of this tuple is only
+runnable when named explicitly (never picked by `mixed`) — this is exactly how
+`FarmCoin4` behaves today.
