@@ -6,7 +6,7 @@ import time
 from gamebots.games.cookie_run import FarmCoin1, FarmCoin2, FarmCoin3
 
 
-def countdown(seconds=3):
+def countdown(seconds=5):
     for remaining in reversed(range(seconds)):
         print(f"Starting automation in {remaining + 1} seconds...")
         time.sleep(1)
