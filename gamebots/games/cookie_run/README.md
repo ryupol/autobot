@@ -2,17 +2,26 @@
 
 [ภาษาไทย](#ภาษาไทย) | [English](#english)
 
+![Cookie Run script button positions](images/button_position.png)
+
 ## ภาษาไทย
 
 สคริปต์ Cookie Run Classic ช่วยเล่นด่าน เก็บรางวัล และเริ่มรอบใหม่อัตโนมัติ
 ต้องเริ่มจากหน้า Home ของ Episode ใดก็ได้
 
-ปุ่มที่สคริปต์คาดไว้:
+ปุ่มที่สคริปต์คาดไว้แสดงอยู่ในภาพด้านบน โดยมีรายละเอียดดังนี้:
 
-- `D`: เลือกเมนู เริ่มเกม หรือสไลด์
+- `D`: เริ่มเกมและสไลด์
 - `A` หรือ `Space`: กระโดด
-- ปุ่มตัวเลข: ซื้อไอเทมและรับรางวัล
-- `Esc`, `O` และ `Q`: จบรอบและออกจากหน้าปัจจุบัน
+- `1`, `2`: เลือกเมนู ไอเทม และรับรางวัล
+- `V`, `W`, `Z`, `B`: นำทางเมนูและเลือกโหมดการเล่น
+- `P`: เปิดเมนู Pet
+- `S`: ยืนยันหรือเลือกปุ่มในบางหน้าจอ
+- `O`: ยืนยันการจบรอบ
+- `Q`: ออกจากหน้าปัจจุบัน
+- `Esc`: เปิดเมนูหยุดชั่วคราวหรือย้อนกลับ
+
+ต้องตั้งค่าปุ่มในเกมหรือ emulator ให้ตรงกับรายการนี้ก่อนเริ่มสคริปต์
 
 ### ก่อนเริ่ม
 
@@ -76,6 +85,26 @@ python -m gamebots.games.cookie_run 4
 แล้วรอจนจบรอบ ใช้เฉพาะเมื่อตั้งค่า emulator หรือ external hotkey
 สำหรับปุ่มเหล่านี้แล้ว
 
+### การตั้งค่า Strategy
+
+ค่าที่แก้ไขได้ของแต่ละ FarmCoin อยู่ในไฟล์
+`gamebots/games/cookie_run/strategy_config.py` เพื่อให้ปรับเวลาและพฤติกรรมได้ง่าย
+โดยไม่ต้องแก้ logic ใน `strategies.py`:
+
+- `*_DURATION_RANGE`: ช่วงเวลาที่ฟาร์ม หน่วยเป็นนาที
+- `*_INITIAL_WAIT_RANGE`: เวลารอก่อนเริ่ม หน่วยเป็นวินาที หรือ `None` ถ้าไม่ต้องการรอ
+- `*_PATTERN_WEIGHTS`: น้ำหนักโอกาสของรูปแบบการเคลื่อนไหว ตัวเลขมากจะมีโอกาสมากขึ้น
+- `*_REWARD_PRESS_RANGE`: จำนวนครั้งที่กดหน้าเก็บรางวัล
+- `*_REWARD_WAIT_RANGE`: ช่วงเวลาระหว่างการกดเก็บรางวัล หน่วยเป็นวินาที
+- `PATTERN_BREAK_CHANCE`: โอกาสที่จะหยุดพักหลังเล่นแต่ละ pattern เช่น `0.002` = 0.2%
+- `PATTERN_BREAK_RANGE`: ช่วงเวลาของการหยุดพัก หน่วยเป็นวินาที
+
+ลำดับของ `PATTERN_WEIGHTS` สำหรับ Strategy 1, 2 และ 3 คือ `single_jump`,
+`double_jump`, `short_slide`, `long_slide`, `panic`
+
+ช่วงเวลาการเก็บรางวัลจะถูกสุ่มให้คลาดเคลื่อนเล็กน้อยในแต่ละ instance
+เพื่อไม่ให้จังหวะการกดเหมือนเดิมทุกครั้ง
+
 ### แก้ปัญหา
 
 - เริ่มจากเมนูผิด: กลับหน้า Home ของ Episode แล้วเริ่ม script ใหม่
@@ -112,7 +141,6 @@ def run_mixed(rounds=100, farm_classes=(FarmCoin1, FarmCoin2, FarmCoin3)):
 Strategy ที่อยู่ใน `STRATEGIES` แต่ไม่อยู่ใน tuple นี้ จะรันได้เฉพาะแบบระบุตรง ๆ
 เท่านั้น (ไม่ถูกสุ่มใน `mixed`) — เช่นเดียวกับ `FarmCoin4` ตอนนี้
 
-
 ---
 
 ## English
@@ -120,12 +148,20 @@ Strategy ที่อยู่ใน `STRATEGIES` แต่ไม่อยู่
 Cookie Run Classic scripts automate episode runs, reward collection, and repeated
 rounds. Start from home page of any episode.
 
-Scripts expect configured keyboard controls:
+The expected script buttons are shown in the image above:
 
-- `D`: navigate/start/slide;
+- `D`: start the run and slide;
 - `A` or `Space`: jump;
-- number keys: item and reward menus;
-- `Esc`, `O`, and `Q`: end and exit flow.
+- `1`, `2`: menu, item, and reward selection;
+- `V`, `W`, `Z`, `B`: menu navigation and game-mode selection;
+- `P`: open the Pet menu;
+- `S`: confirm or select on certain screens;
+- `O`: confirm the end-of-round flow;
+- `Q`: exit the current screen;
+- `Esc`: open the pause menu or go back.
+
+Configure the game or emulator controls to match these keys before starting
+the script.
 
 ## Before starting
 
@@ -189,6 +225,27 @@ python -m gamebots.games.cookie_run 4
 Experimental mode. After preparation, presses `Right Alt` with random
 `0`, `-`, or `=` key, then waits for run duration. Use only when emulator or
 external hotkeys are configured for this behavior.
+
+## Strategy configuration
+
+Editable settings for each FarmCoin are in
+`gamebots/games/cookie_run/strategy_config.py`. This lets you tune timing and
+behavior without changing the automation logic in `strategies.py`:
+
+- `*_DURATION_RANGE`: farming duration in minutes.
+- `*_INITIAL_WAIT_RANGE`: wait before starting, in seconds, or `None` for no wait.
+- `*_PATTERN_WEIGHTS`: relative probability of each movement pattern; larger
+  numbers are more likely.
+- `*_REWARD_PRESS_RANGE`: number of reward-screen taps.
+- `*_REWARD_WAIT_RANGE`: delay range between reward-screen taps, in seconds.
+- `PATTERN_BREAK_CHANCE`: chance of taking a break after each pattern; `0.002` = 0.2%.
+- `PATTERN_BREAK_RANGE`: break duration range, in seconds.
+
+For Strategies 1, 2, and 3, `PATTERN_WEIGHTS` order is `single_jump`,
+`double_jump`, `short_slide`, `long_slide`, `panic`.
+
+Reward-screen timing ranges receive a very small random variation for each
+instance, so the cadence is not identical every time.
 
 ## Troubleshooting
 

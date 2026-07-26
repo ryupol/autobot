@@ -18,31 +18,31 @@ from gamebots.core import Action
 # The `1,2,1` block selects Double Coin. If the selection was still cycling, the
 # trailing `1` (or `d,d`) doubles as "press any button" to cancel and continue.
 NAV_ROUTES = (
-    # z, wait>=2s, b,b,b, d, 1,2,1, <load>, 1
+    # z, wait>=2s, b,b,b, d, 1,2,1, <load>, d
     (
         ("key", "z"), ("wait", 2.0, 2.8),
         ("key", "b"), ("key", "b"), ("key", "b"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "1"),
+        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
     ),
-    # d, v, d, 1,2,1, <load>, 1
+    # d, v, d, 1,2,1, <load>, d
     (
         ("key", "d"), ("key", "v"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "1"),
+        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
     ),
-    # d, v, v, w, d, 1,2,1, <load>, 1
+    # d, v, v, w, d, 1,2,1, <load>, d
     (
         ("key", "d"), ("key", "v"), ("key", "v"), ("key", "w"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "1"),
+        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
     ),
     # d, 1,2,1, <load>, v, v, w, d, d
     (
         ("key", "d"), ("key", "1"), ("key", "2"), ("key", "1"), ("load",),
         ("key", "v"), ("key", "v"), ("key", "w"), ("key", "d"), ("key", "d"),
     ),
-    # d, v, d, v, d, 1,2,1, <load>, 1
+    # d, v, d, v, d, 1,2,1, <load>, d
     (
         ("key", "d"), ("key", "v"), ("key", "d"), ("key", "v"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "1"),
+        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
     ),
 )
 
