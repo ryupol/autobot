@@ -75,6 +75,23 @@ python -m gamebots.games.cookie_run mixed
 
 สุ่มใช้ Strategy 1, 2 หรือ 3 ใหม่ในแต่ละรอบ
 
+### Strategy — FarmBox (idle)
+
+```powershell
+python -m gamebots.games.cookie_run box
+```
+
+ไม่มีกดปุ่มระหว่างรัน แค่รอให้ด่านจบโดยใช้ทีมที่เลือกไว้
+กำหนดเวลาล้างด่านด้วย `--time` (หน่วยเป็นนาที) เช่น
+
+```powershell
+python -m gamebots.games.cookie_run box --time 3.6
+```
+
+เวลาจริงจะถูกสุ่มเพิ่ม 0–10% จากค่าที่ตั้งโดยอัตโนมัติ
+ค่าเริ่มต้นดูได้ที่ `FARM_BOX_DEFAULT_DURATION` ใน `strategy_config.py`
+ดูตัวอย่างบิวด์และเวลาอ้างอิงได้ที่ [GUIDES.md](GUIDES.md)
+
 ### Strategy 4 — โหมด external hotkey
 
 ```powershell
@@ -215,6 +232,23 @@ python -m gamebots.games.cookie_run mixed
 ```
 
 Randomly selects strategy 1, 2, or 3 for each round.
+
+## Strategy — FarmBox (idle)
+
+```powershell
+python -m gamebots.games.cookie_run box
+```
+
+No key presses during the run — just waits for your team to auto-clear the
+stage. Pass your clear time with `--time` (in minutes); a random 0–10 % jitter
+is added automatically.
+
+```powershell
+python -m gamebots.games.cookie_run box --time 3.6
+```
+
+Default fallback is `FARM_BOX_DEFAULT_DURATION` in `strategy_config.py`.
+See [GUIDES.md](GUIDES.md) for example builds.
 
 ## Strategy 4 — external hotkey mode
 

@@ -10,6 +10,7 @@ from gamebots.games.cookie_run.delays import (
     varied_beta_delay,
 )
 from gamebots.games.cookie_run.strategy_config import (
+    FARM_BOX_DEFAULT_DURATION,
     FARM_COIN_1_DURATION_RANGE,
     FARM_COIN_1_PATTERN_WEIGHTS,
     FARM_COIN_1_REWARD_PRESS_RANGE,
@@ -176,3 +177,17 @@ class FarmCoin4(FarmCoinBase):
             release_delay=self.delay(0.4, 0.6),
         )
         self.wait(60 * duration_minutes)
+
+
+class FarmBox(FarmCoinBase):
+    """Idle strategy — no key presses during the run, just waits."""
+    starts_run_manually = False
+
+    def __init__(self, **kwargs):
+        self.box_minutes = kwargs.pop("box_duration", FARM_BOX_DEFAULT_DURATION)
+        super().__init__(**kwargs)
+
+    def run(self):
+        variance = self.box_minutes * random.uniform(0, 0.10)
+        self.wait(60 * (self.box_minutes + variance))
+        self.force_end_run()

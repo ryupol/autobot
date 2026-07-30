@@ -4,6 +4,23 @@ from abc import ABC, abstractmethod
 import random
 
 from gamebots.core import Action
+from gamebots.games.cookie_run import strategy_config as _strategy_config
+
+
+# Dynamic double-coin segment — resolves to the 4-step block or empty
+# based on the current config value at import time.
+_DOUBLE_COIN_STEPS = (
+    ("key", "1"), ("key", "2"), ("key", "1"), ("load",),
+) if _strategy_config.DOUBLE_COIN else ()
+
+
+# Normal route — used 70 % of the time.
+#   d, [1,2,1,<load>], d
+NORMAL_ROUTE = (
+    ("key", "d"),
+    *_DOUBLE_COIN_STEPS,
+    ("key", "d"),
+)
 
 
 # Alternate navigation routes to the Double Coin start. Every route eventually
@@ -18,31 +35,32 @@ from gamebots.core import Action
 # The `1,2,1` block selects Double Coin. If the selection was still cycling, the
 # trailing `1` (or `d,d`) doubles as "press any button" to cancel and continue.
 NAV_ROUTES = (
-    # z, wait>=2s, b,b,b, d, 1,2,1, <load>, d
+    # z, wait>=2s, b,b,b, d, [1,2,1,<load>], d, d
     (
         ("key", "z"), ("wait", 2.0, 2.8),
         ("key", "b"), ("key", "b"), ("key", "b"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
+        *_DOUBLE_COIN_STEPS, ("key", "d"), ("key", "d"),
     ),
-    # d, v, d, 1,2,1, <load>, d
+    # d, v, d, [1,2,1,<load>], d, d
     (
         ("key", "d"), ("key", "v"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
+        *_DOUBLE_COIN_STEPS, ("key", "d"), ("key", "d"),
     ),
-    # d, v, v, w, d, 1,2,1, <load>, d
+    # d, v, v, w, d, [1,2,1,<load>], d, d
     (
         ("key", "d"), ("key", "v"), ("key", "v"), ("key", "w"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
+        *_DOUBLE_COIN_STEPS, ("key", "d"), ("key", "d"),
     ),
-    # d, 1,2,1, <load>, v, v, w, d, d
+    # d, [1,2,1,<load>], v, v, w, d, d
     (
-        ("key", "d"), ("key", "1"), ("key", "2"), ("key", "1"), ("load",),
+        ("key", "d"),
+        *_DOUBLE_COIN_STEPS,
         ("key", "v"), ("key", "v"), ("key", "w"), ("key", "d"), ("key", "d"),
     ),
-    # d, v, d, v, d, 1,2,1, <load>, d
+    # d, v, d, v, d, [1,2,1,<load>], d, d
     (
         ("key", "d"), ("key", "v"), ("key", "d"), ("key", "v"), ("key", "d"),
-        ("key", "1"), ("key", "2"), ("key", "1"), ("load",), ("key", "d"),
+        *_DOUBLE_COIN_STEPS, ("key", "d"), ("key", "d"),
     ),
 )
 
@@ -131,7 +149,11 @@ class FarmCoinBase(Action, ABC):
             self.wait(interval)
 
     def start(self):
-        route = random.choice(NAV_ROUTES)
+        if random.random() < 0.7:
+            route = NORMAL_ROUTE
+        else:
+            route = random.choice(NAV_ROUTES)
+
         for step in route:
             kind = step[0]
             if kind == "load":
@@ -157,28 +179,14 @@ class FarmCoinBase(Action, ABC):
         """Play one game."""
 
     def end(self):
-        self.press(
-            "1",
-            hold_time=self.delay(0.15, 0.25),
-            release_delay=self.delay(0.4, 0.6),
-        )
-        self.wait(self.delay(0.4, 0.6))
 
         # Close the result screen, then collect rewards — both as human-style
-        # bursts rather than fixed-cadence loops.
-        self._human_taps(
-            random.randint(3, 5),
-            cadence=(0.08, 0.16),
-            slowdown=(0.06, 0.18),
-            hold=(0.05, 0.15),
-            release=(0.12, 0.22),
-        )
         self._human_taps(
             random.randint(*self.reward_press_range),
             cadence=self.reward_wait_range,
-            slowdown=(0.1, 0.5),
-            hold=(0.1, 0.2),
-            release=(0.3, 0.6),
+            slowdown=(0.06, 0.5),
+            hold=(0.05, 0.2),
+            release=(0.12, 0.6),
         )
 
         self.press(
@@ -186,7 +194,7 @@ class FarmCoinBase(Action, ABC):
             hold_time=self.delay(0.18, 0.28),
             release_delay=self.delay(0.2, 0.3),
         )
-        self.wait(self.delay(1.2, 2.2))
+        self.wait(self.delay(0.2, 1.6))
 
     def force_end_run(self):
         self.press(

@@ -40,3 +40,12 @@ FARM_COIN_3_REWARD_WAIT_RANGE = (0.7, 2.2)
 FARM_COIN_4_REWARD_PRESS_RANGE = (6, 11)
 FARM_COIN_4_REWARD_WAIT_RANGE = (0.3, 0.6)
 FARM_COIN_4_DURATION_RANGE = (4.8, 4.9)  # Farming duration, in minutes.
+
+
+# FarmBox: idle strategy — no key presses, just waits for the run to finish.
+FARM_BOX_DEFAULT_DURATION = 3.6  # Farming duration, in minutes (overridable via --time).
+
+
+# Double Coin toggle. When True, routes include the 1,2,1 selection + load wait.
+# When False, routes navigate directly to the play button.
+DOUBLE_COIN = False

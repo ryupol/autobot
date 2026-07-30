@@ -12,9 +12,9 @@ def countdown(seconds=5):
         time.sleep(1)
 
 
-def run_farm(farm_class, rounds=100):
+def run_farm(farm_class, rounds=100, farm_kwargs=None):
     countdown()
-    farm = farm_class()
+    farm = farm_class(**(farm_kwargs or {}))
     for round_index in range(rounds):
         _run_round(farm, round_index)
         _rest_between_rounds(farm)
@@ -49,7 +49,7 @@ def _rest_between_rounds(farm):
 
     roll = random.random()
     if roll < 0.08:
-        rest = farm.delay(60, 300)
+        rest = farm.delay(5, 100)
         print(f"Idling for {rest / 60:.1f} minutes...")
     elif roll < 0.28:
         rest = farm.delay(0.5, 2.5)
