@@ -6,7 +6,7 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description="Cookie Run Classic automation")
     parser.add_argument("strategy", choices=("1", "2", "3", "4", "box", "mixed"))
-    parser.add_argument("--rounds", type=int, default=100)
+    parser.add_argument("--rounds", type=int, default=1000)
     parser.add_argument("--time", type=float, help="FarmBox duration in minutes")
     parser.add_argument("--no-double-coin", action="store_true")
     args = parser.parse_args()
