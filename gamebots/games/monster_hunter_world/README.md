@@ -4,6 +4,9 @@
 
 ## ภาษาไทย
 
+> **ข้อควรระวัง:** สคริปต์นี้ยังทดสอบไม่มากเท่า Cookie Run Classic โหมด `box`
+> และอาจเจอ CAPTCHA ระหว่างรัน ควรเฝ้าดูใกล้ ๆ โดยเฉพาะการรันครั้งแรก
+
 ระบบอัตโนมัติที่มี:
 
 - ฟาร์มเควส Icebloom
@@ -94,6 +97,10 @@ python -m gamebots.games.monster_hunter_world tailraider --rounds 10
 ---
 
 ## English
+
+> **Caution:** this script is less tested than Cookie Run Classic `box` mode
+> and may trigger a CAPTCHA during runs. Watch closely, especially on first
+> run.
 
 Available automation:
 

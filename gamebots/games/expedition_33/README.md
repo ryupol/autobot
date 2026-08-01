@@ -4,6 +4,9 @@
 
 ## ภาษาไทย
 
+> **ข้อควรระวัง:** สคริปต์นี้ยังทดสอบไม่มากเท่า Cookie Run Classic โหมด `box`
+> และอาจเจอ CAPTCHA ระหว่างรัน ควรเฝ้าดูใกล้ ๆ โดยเฉพาะการรันครั้งแรก
+
 สคริปต์นี้ฟาร์ม EXP โดยต่อสู้กับ merchant ที่ Renoir’s Draft ซ้ำ
 
 วิดีโออ้างอิง: <https://www.youtube.com/watch?v=_SijRHlymo4>
@@ -37,6 +40,8 @@ python -m gamebots.games.expedition_33
 
 ค่าเริ่มต้นรัน 100 รอบ
 
+หยุดสคริปต์ได้ทุกเมื่อด้วยการกลับไป terminal แล้วกด `Ctrl+C`
+
 เปลี่ยนจำนวนรอบ:
 
 ```powershell
@@ -54,6 +59,10 @@ python -m gamebots.games.expedition_33 --rounds 10
 ---
 
 ## English
+
+> **Caution:** this script is less tested than Cookie Run Classic `box` mode
+> and may trigger a CAPTCHA during runs. Watch closely, especially on first
+> run.
 
 This script farms EXP by repeatedly fighting merchant in Renoir’s Draft.
 

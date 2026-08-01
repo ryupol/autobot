@@ -16,6 +16,24 @@ Gamebots คือชุดสคริปต์กดคีย์บอร์�
 สคริปต์ส่งคีย์บอร์ดตรงไปยังหน้าต่างที่กำลัง active โดยไม่ตรวจจับภาพหน้าจอ
 ดังนั้นตำแหน่งเริ่มต้น ปุ่มควบคุม และเวลาโหลดต้องตรงกับที่สคริปต์คาดไว้
 
+### README แต่ละเกม
+
+- [Monster Hunter: World](gamebots/games/monster_hunter_world/README.md#ภาษาไทย)
+- [Clair Obscur: Expedition 33](gamebots/games/expedition_33/README.md#ภาษาไทย)
+- [Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) — ดู
+  [GUIDES.md](gamebots/games/cookie_run/GUIDES.md) สำหรับตัวอย่างบิวด์และเวลา
+
+> **แนะนำ:** สำหรับ Cookie Run Classic ให้ใช้โหมด `box`
+> (`python -m gamebots.games.cookie_run box`) เพราะจากที่ลองใช้มา ยังไม่เจอ
+> CAPTCHA ขึ้นระหว่างรัน ส่วนโหมด/เกมอื่นเจอ CAPTCHA ได้ ควรเฝ้าดูใกล้ ๆ
+> เมื่อใช้งาน แนะนำให้เล่นผ่าน emulator **LDPlayer 14**
+> (<https://www.ldplayer.net/>)
+
+> **สำคัญ:** สคริปต์นี้เป็นตัวจำลองการกดคีย์บอร์ด (keyboard press simulator)
+> ไม่ใช่การควบคุมเกมโดยตรง ต้องเปิดหน้าต่างเกมเป้าหมายไว้เป็นหน้าต่างที่ active
+> (focus) ตลอดการทำงาน ห้ามสลับไปแอปอื่นระหว่างรัน เพราะปุ่มที่กดจะไปกดที่
+> หน้าต่างอื่นแทน
+
 ### ความต้องการของระบบ
 
 - Windows 10 หรือ 11
@@ -52,11 +70,11 @@ py --version
 | MHW ฟาร์ม Icebloom | `python -m gamebots.games.monster_hunter_world icebloom` | [README MHW](gamebots/games/monster_hunter_world/README.md#ภาษาไทย) |
 | MHW Tailraider | `python -m gamebots.games.monster_hunter_world tailraider` | [README MHW](gamebots/games/monster_hunter_world/README.md#ภาษาไทย) |
 | Expedition 33 ฟาร์ม EXP | `python -m gamebots.games.expedition_33` | [README Expedition 33](gamebots/games/expedition_33/README.md#ภาษาไทย) |
-| Cookie Run Classic แบบ 1 | `python -m gamebots.games.cookie_run 1` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
-| Cookie Run Classic แบบ 2 | `python -m gamebots.games.cookie_run 2` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
-| Cookie Run Classic แบบ 3 | `python -m gamebots.games.cookie_run 3` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
-| Cookie Run Classic แบบ 4 | `python -m gamebots.games.cookie_run 4` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+| Cookie Run Classic โหมด `box` (แนะนำ) | `python -m gamebots.games.cookie_run box --time 3.6` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
 | Cookie Run Classic สุ่มแบบ 1–3 | `python -m gamebots.games.cookie_run mixed` | [README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย) |
+
+ดูแบบ (strategy) อื่นของ Cookie Run Classic ทั้งหมดได้ที่
+[README Cookie Run Classic](gamebots/games/cookie_run/README.md#ภาษาไทย)
 
 เปลี่ยน `python` เป็น `py` ได้เมื่อจำเป็น:
 
@@ -64,7 +82,8 @@ py --version
 py -m gamebots.games.monster_hunter_world icebloom
 ```
 
-แต่ละ launcher นับถอยหลัง 3 วินาทีสำหรับสลับกลับไปหน้าเกม
+แต่ละ launcher นับถอยหลัง 3–5 วินาทีสำหรับสลับกลับไปหน้าเกม (ดูจำนวนวินาที
+ที่แน่นอนได้ใน README ของเกมนั้น)
 หยุดสคริปต์ได้ด้วย `Ctrl+C` ใน terminal
 
 `-m` ย่อมาจาก module ให้ Python หา package ตาม import path แล้วรันไฟล์
@@ -125,6 +144,24 @@ These scripts send keyboard input directly to the focused window. They do not
 use screen recognition, so correct starting position, key bindings, and loading
 times matter.
 
+### Per-game READMEs
+
+- [Monster Hunter: World](gamebots/games/monster_hunter_world/README.md)
+- [Clair Obscur: Expedition 33](gamebots/games/expedition_33/README.md)
+- [Cookie Run Classic](gamebots/games/cookie_run/README.md) — see
+  [GUIDES.md](gamebots/games/cookie_run/GUIDES.md) for reference builds and
+  clear times
+
+> **Recommended:** for Cookie Run Classic, use `box` mode
+> (`python -m gamebots.games.cookie_run box`). In testing so far it has not
+> triggered a CAPTCHA, while other modes/games can. Watch closely when using
+> any mode. Recommended emulator: **LDPlayer 14** (<https://www.ldplayer.net/>).
+
+> **Important:** this project is a keyboard press simulator, not direct game
+> control. Keep the target game window focused (active) for the entire run.
+> Do not switch to another app while a script is running — key presses will
+> go to whatever window is focused instead.
+
 ## Requirements
 
 - Windows 10 or 11;
@@ -161,11 +198,11 @@ Prepare game using its game-specific README, then launch matching script:
 | MHW Icebloom | `python -m gamebots.games.monster_hunter_world icebloom` | [MHW README](gamebots/games/monster_hunter_world/README.md) |
 | MHW Tailraider | `python -m gamebots.games.monster_hunter_world tailraider` | [MHW README](gamebots/games/monster_hunter_world/README.md) |
 | Expedition 33 EXP farm | `python -m gamebots.games.expedition_33` | [Expedition 33 README](gamebots/games/expedition_33/README.md) |
-| Cookie Run Classic strategy 1 | `python -m gamebots.games.cookie_run 1` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
-| Cookie Run Classic strategy 2 | `python -m gamebots.games.cookie_run 2` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
-| Cookie Run Classic strategy 3 | `python -m gamebots.games.cookie_run 3` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
-| Cookie Run Classic strategy 4 | `python -m gamebots.games.cookie_run 4` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+| Cookie Run Classic `box` mode (recommended) | `python -m gamebots.games.cookie_run box --time 3.6` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
 | Cookie Run Classic mixed 1–3 | `python -m gamebots.games.cookie_run mixed` | [Cookie Run Classic README](gamebots/games/cookie_run/README.md) |
+
+See [Cookie Run Classic README](gamebots/games/cookie_run/README.md) for all
+other Cookie Run Classic strategies.
 
 Replace `python` with `py` when needed:
 
@@ -173,8 +210,8 @@ Replace `python` with `py` when needed:
 py -m gamebots.games.monster_hunter_world icebloom
 ```
 
-Each launcher gives 3 seconds to focus game window. Stop automation from
-terminal with `Ctrl+C`.
+Each launcher gives 3–5 seconds to focus game window (see each game's README
+for the exact duration). Stop automation from terminal with `Ctrl+C`.
 
 `-m` means module. Python resolves the package through its import path, then
 runs that package’s `__main__.py`. For example:

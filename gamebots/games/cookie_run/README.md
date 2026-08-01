@@ -6,6 +6,10 @@
 
 ## ภาษาไทย
 
+> **ข้อควรระวัง:** สคริปต์ไม่มีระบบจัดการหน้ารับรางวัลประจำวัน ถ้าถึงเวลา
+> รีเซ็ตรางวัล (4 ทุ่ม) ระหว่างรัน สคริปต์จะไม่ทำงานตามที่คาดไว้ ต้องคอย
+> สังเกตช่วงเวลานี้และเข้าไปกดรับรางวัลเองก่อนให้สคริปต์ทำงานต่อ
+
 สคริปต์ Cookie Run Classic ช่วยเล่นด่าน เก็บรางวัล และเริ่มรอบใหม่อัตโนมัติ
 ต้องเริ่มจากหน้า Home ของ Episode ใดก็ได้
 
@@ -23,6 +27,15 @@
 
 ต้องตั้งค่าปุ่มในเกมหรือ emulator ให้ตรงกับรายการนี้ก่อนเริ่มสคริปต์
 
+### Emulator ที่แนะนำ
+
+แนะนำให้เล่นผ่าน **LDPlayer 14** (<https://www.ldplayer.net/>)
+
+1. ดาวน์โหลดและติดตั้ง LDPlayer 14 จากลิงก์ด้านบน
+2. ติดตั้ง Cookie Run Classic ผ่าน Play Store ที่อยู่ใน LDPlayer
+3. ตั้งค่าปุ่มคีย์บอร์ด (keyboard mapping) ใน LDPlayer ให้ตรงกับรายการปุ่มด้านบน
+4. เปิดหน้าต่าง LDPlayer ทิ้งไว้เป็นหน้าต่างที่ active ตลอดเวลาที่รันสคริปต์
+
 ### ก่อนเริ่ม
 
 1. เปิด Episode ใดก็ได้
@@ -30,11 +43,13 @@
 3. ตรวจสอบว่าตั้งค่าปุ่มตรงกับสคริปต์
 4. เปิด terminal ที่ root ของโปรเจกต์
 5. รัน strategy ที่ต้องการ
-6. ระหว่างนับถอยหลัง 3 วินาที ให้สลับกลับไปหน้าเกม
+6. ระหว่างนับถอยหลัง 5 วินาที ให้สลับกลับไปหน้าเกม
 
 Strategy มาตรฐานจะเข้าหน้าเตรียมเกม เลือก Double Coin เริ่มวิ่ง เล่นด่าน
-เก็บรางวัล และเริ่มรอบใหม่อัตโนมัติ ค่าเริ่มต้นรัน 100 รอบ
+เก็บรางวัล และเริ่มรอบใหม่อัตโนมัติ ค่าเริ่มต้นรัน 1000 รอบ
 และมีพักเป็นครั้งคราว
+
+หยุดสคริปต์ได้ทุกเมื่อด้วยการกลับไป terminal แล้วกด `Ctrl+C`
 
 เปลี่ยนจำนวนรอบได้ด้วย `--rounds`:
 
@@ -162,6 +177,11 @@ Strategy ที่อยู่ใน `STRATEGIES` แต่ไม่อยู่
 
 ## English
 
+> **Caution:** the script has no handling for the daily reward claim screen.
+> If daily reset (10 PM) hits while the script is running, it will not behave
+> as expected. Watch for this time window and manually claim the reward
+> before letting the script continue.
+
 Cookie Run Classic scripts automate episode runs, reward collection, and repeated
 rounds. Start from home page of any episode.
 
@@ -180,6 +200,16 @@ The expected script buttons are shown in the image above:
 Configure the game or emulator controls to match these keys before starting
 the script.
 
+## Recommended emulator
+
+Recommended: **LDPlayer 14** (<https://www.ldplayer.net/>).
+
+1. Download and install LDPlayer 14 from the link above.
+2. Install Cookie Run Classic through LDPlayer's built-in Play Store.
+3. Set keyboard mapping in LDPlayer to match the key list above.
+4. Keep the LDPlayer window focused (active) for the entire time the script
+   is running.
+
 ## Before starting
 
 1. Open any episode.
@@ -187,11 +217,13 @@ the script.
 3. Confirm expected keyboard bindings.
 4. Open terminal in project root.
 5. Run selected strategy.
-6. Switch focus to game during 3-second countdown.
+6. Switch focus to game during 5-second countdown.
 
 Each standard strategy automatically opens preparation, selects Double Coin,
-starts run, plays, collects rewards, and loops. Default runner performs 100
+starts run, plays, collects rewards, and loops. Default runner performs 1000
 rounds with occasional breaks.
+
+Stop the script anytime by focusing the terminal and pressing `Ctrl+C`.
 
 Change round count with `--rounds`:
 
