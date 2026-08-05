@@ -70,15 +70,15 @@ NAV_ROUTES = (
 # isn't a metronome. Every route must land back on the episode home page.
 DETOUR_ROUTES = (
     # open pet menu, close
-    (("key", "p"), ("key", "b")),
+    (("key", "p"), ("wait", 1.0, 1.6), ("key", "b")),
     # open settings, close
-    (("key", "q"), ("key", "w")),
+    (("key", "q"), ("wait", 1.0, 1.3), ("key", "w")),
     # open task menu, close
-    (("key", "v"), ("key", "w")),
+    (("key", "v"), ("wait", 1.0, 1.9), ("key", "w")),
     # open task menu, route to common task, close
-    (("key", "v"), ("key", "v"), ("key", "w")),
+    (("key", "v"), ("wait", 1.0, 1.2), ("key", "v"), ("key", "w")),
     # open settings, switch to game info, close
-    (("key", "q"), ("key", "2"), ("key", "w")),
+    (("key", "q"), ("wait", 1.0, 1.7), ("key", "2"), ("key", "w")),
     # enter party run, quit back to home (needs settle waits)
     (
         ("key", "w"), ("wait", 3.5, 4.5),
