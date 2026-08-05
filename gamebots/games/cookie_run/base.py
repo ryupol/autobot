@@ -79,11 +79,10 @@ DETOUR_ROUTES = (
     (("key", "v"), ("key", "v"), ("key", "w")),
     # open settings, switch to game info, close
     (("key", "q"), ("key", "2"), ("key", "w")),
-    # enter party run, pick solo race, quit back to home (needs settle waits)
+    # enter party run, quit back to home (needs settle waits)
     (
         ("key", "w"), ("wait", 3.5, 4.5),
-        ("key", "o"), ("wait", 2.0, 3.0),
-        ("key", "w"), ("wait", 3.5, 4.5),
+        ("key", "b"), ("wait", 2.0, 3.0),
     ),
 )
 
